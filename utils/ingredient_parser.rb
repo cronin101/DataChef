@@ -28,32 +28,9 @@ module IngredientParser
     units.concat s_prefxs.product(s_sfxs).map { |p, s| p + s }
 
     # Esoteric units:
-    units.concat %w(stick splash dash knob pinch glass bottle)
+    units.concat %w(stick splash dash knob pinch glass bottle bunch box)
 
     # Is the token (probably) a quantity?
     units.map { |u| /^\d*(#{u}(s)?)?$/.match token }.any?
   end
 end
-
-ingredients = [
-  '200g of heavily salted butter',
-  'six bottles of beer',
-  '50ml of clotted cream',
-  'plain brown flour',
-  '1 oz french cheese',
-  '8 large eggs',
-  '2kg of salted pork',
-  'a pinch of salt',
-  'a tablespoon of honey'
-]
-
-ingredients.map { |i| IngredientParser.parse i }
-# => ["butter",
-#     "beer",
-#     "clotted cream",
-#     "flour",
-#     "cheese",
-#     "eggs",
-#     "pork",
-#     "salt",
-#     "honey"]
