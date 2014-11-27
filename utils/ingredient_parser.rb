@@ -6,7 +6,7 @@ module IngredientParser
 
   def parse(line)
     tagger = EngTagger.new
-    tagged = tagger.add_tags(line)
+    tagged = tagger.add_tags(line.split(',').first)
 
     tagger.get_nouns(tagged).keys.reject { |t| metadata? t }.join ' '
   end
@@ -31,6 +31,6 @@ module IngredientParser
     units.concat %w(stick splash dash knob pinch glass bottle bunch box)
 
     # Is the token (probably) a quantity?
-    units.map { |u| /^\d*(#{u}(s)?)?$/.match token }.any?
+    units.map { |u| /^(\d+(\.\d+)?)?(#{u}(s)?)?$/.match token }.any?
   end
 end
