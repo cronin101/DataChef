@@ -1,3 +1,4 @@
+require 'active_support/inflector'
 require 'engtagger'
 
 # Normalises a line from an ingredient list
@@ -8,7 +9,12 @@ module IngredientParser
     tagger = EngTagger.new
     tagged = tagger.add_tags(line.split(',').first)
 
-    tagger.get_nouns(tagged).keys.reject { |t| metadata? t }.join ' '
+    tagger
+      .get_nouns(tagged)
+      .keys
+      .reject { |t| metadata? t }
+      .map    { |t| ActiveSupport::Inflector.singularize t }
+      .join ' '
   end
 
   def metadata?(token)
