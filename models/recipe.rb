@@ -1,7 +1,5 @@
 require 'couch_potato'
 
-require_relative '../db/data_source.rb'
-
 # Represents a recipe, taken from somewhere on the internet.
 class Recipe
   include CouchPotato::Persistence

@@ -1,7 +1,6 @@
 require 'couch_potato'
 
+require './db/data_source.rb'
 require './utils/ingredient_parser.rb'
 require './utils/recipe_ingestor.rb'
 require './models/recipe.rb'
-
-CouchPotato::Config.database_name = 'data_chef'
