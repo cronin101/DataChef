@@ -3,4 +3,4 @@ language: ruby
 rvm:
   - 2.1.0
 
-script: rake
+script: bundle exec rake
