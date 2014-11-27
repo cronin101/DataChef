@@ -1,5 +1,7 @@
 require 'couch_potato'
 
+require_relative '../db/data_source.rb'
+
 # Represents a recipe, taken from somewhere on the internet.
 class Recipe
   include CouchPotato::Persistence
@@ -24,11 +26,7 @@ class Recipe
   view :unpopulated, key: :created_at,
                      conditions: 'doc.is_populated === false'
 
-  def self.list
-    CouchPotato.database.view Recipe.all
-  end
-
   def self.oldest_unpopulated
-    (CouchPotato.database.view Recipe.unpopulated(descending: false)).first
+    DataSource.get(Recipe.unpopulated(descending: false)).first
   end
 end
