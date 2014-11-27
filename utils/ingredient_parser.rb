@@ -30,8 +30,8 @@ module IngredientParser
     units.concat %w(lb oz floz)
 
     # Spoon units:
-    s_prefxs, s_sfxs = %w(tea table), ['spoon', ' spoon', '-spoon']
-    units.concat s_prefxs.product(s_sfxs).map { |p, s| p + s }
+    s_prfxs, s_sfxs = %w(tea table), ['spoon', ' spoon', '-spoon']
+    units.concat s_prfxs.product(s_sfxs).map { |p, s| p + s }
 
     # Esoteric units:
     units.concat %w(stick splash dash knob pinch glass bottle bunch box)
