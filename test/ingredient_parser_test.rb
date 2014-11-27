@@ -3,8 +3,8 @@ require_relative '../utils/ingredient_parser.rb'
 
 describe IngredientParser do
   it 'can simplify ingredients used to make a cake' do
-    [# Basic          ,  Complex
-      'flour', '100g of soft white flour'
+    [# Basic ,           Complex
+      'flour',          '100g of soft white flour'
     ].each_slice(2) do |simple, complex|
       assert_equal simple, IngredientParser.parse(complex)
     end
