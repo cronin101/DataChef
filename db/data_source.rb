@@ -1,3 +1,5 @@
+require 'couch_potato'
+
 # The interface for the datasource
 module DataSource
   CouchPotato::Config.database_name = 'data_chef'

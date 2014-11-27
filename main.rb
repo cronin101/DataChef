@@ -1,5 +1,3 @@
-require 'couch_potato'
-
 require './db/data_source.rb'
 require './utils/ingredient_parser.rb'
 require './utils/recipe_ingestor.rb'
