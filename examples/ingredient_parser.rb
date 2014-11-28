@@ -1,4 +1,4 @@
-require_relative '../utils/ingredient_parser.rb'
+require '../utils/ingredient_parser.rb'
 
 ingredients = [
   '200g of heavily salted butter',
@@ -18,7 +18,7 @@ ingredients.map { |i| IngredientParser.parse i }
 #     "clotted cream",
 #     "flour",
 #     "cheese",
-#     "eggs",
+#     "egg",
 #     "pork",
 #     "salt",
 #     "honey"]
