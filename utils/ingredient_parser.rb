@@ -18,7 +18,11 @@ module IngredientParser
   end
 
   def metadata?(token)
-    [:number_or_quantity?].map { |test| send test, token }.any?
+    [:number_or_quantity?, :non_word_characters?].map { |test| send test, token }.any?
+  end
+
+  def non_word_characters?(token)
+    !(/\w+/.match token)
   end
 
   def number_or_quantity?(token)
@@ -30,11 +34,12 @@ module IngredientParser
     units.concat %w(lb oz floz)
 
     # Spoon units:
-    s_prfxs, s_sfxs = %w(tea table), ['spoon', ' spoon', '-spoon']
+    s_prfxs, s_sfxs = %w(tea table t tb), ['spoon', ' spoon', '-spoon', 'sp']
     units.concat s_prfxs.product(s_sfxs).map { |p, s| p + s }
 
     # Esoteric units:
     units.concat %w(stick splash dash knob pinch glass bottle bunch box)
+    units.concat %w(head sprig fillet piece juice)
 
     # Is the token (probably) a quantity?
     units.map { |u| /^(\d+(\.\d+)?)?(#{u}(s)?)?$/.match token }.any?
