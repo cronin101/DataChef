@@ -19,11 +19,15 @@ class Recipe < ActiveRecord::Base
     self.description            = contents[:description]
     self.source_ingredients     = contents[:ingredients]
 
-    self.ingredient_ids         = contents[:ingredients]
-        .map { |i| IngredientParser.parse i }
-        .map { |name| Ingredient.find_or_create_by name: name }
+    self.ingredient_ids = simplified_ingredients_from_source
         .map { |i| i.link_to_recipe! id }
-        .map(&:reload).map(&:id)
+        .map(&:id)
+  end
+
+  def simplified_ingredients_from_source
+    source_ingredients
+      .map { |i| IngredientParser.parse i }
+      .map { |name| Ingredient.find_or_create_by name: name }
   end
 
   def self.oldest_unpopulated
