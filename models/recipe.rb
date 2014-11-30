@@ -6,25 +6,24 @@ class Recipe < ActiveRecord::Base
 
   def update_using_scraper(scraper)
     tap do |r|
-      url                      = r.source_uri
-      contents                 = scraper.scrape(url)
-
-      r.title                  = contents[:title]
-      r.description            = contents[:description]
-      r.source_ingredients     = contents[:ingredients]
-
-      ingredients = contents[:ingredients]
-          .map { |i| IngredientParser.parse i }
-          .map { |name| Ingredient.find_or_create_by name: name }
-
-      ingredients.each { |i| i.link_to_recipe! r.id }
-
-      r.ingredient_ids_will_change!
-      r.ingredient_ids = ingredients.map(&:reload).map(&:id)
+      contents = scraper.scrape(r.source_uri)
+      r.update_from_contents(contents)
 
       r.has_been_scraped = true
       r.save!
     end
+  end
+
+  def update_from_contents(contents)
+    self.title                  = contents[:title]
+    self.description            = contents[:description]
+    self.source_ingredients     = contents[:ingredients]
+
+    self.ingredient_ids         = contents[:ingredients]
+        .map { |i| IngredientParser.parse i }
+        .map { |name| Ingredient.find_or_create_by name: name }
+        .map { |i| i.link_to_recipe! id }
+        .map(&:reload).map(&:id)
   end
 
   def self.oldest_unpopulated
