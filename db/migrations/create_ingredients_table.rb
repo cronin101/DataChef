@@ -7,6 +7,7 @@ class CreateIngredientsTable < ActiveRecord::Migration
       t.text :name, null: false, index: true
       t.integer :recipe_frequency, null: false,  default: 0
       t.integer :recipe_ids, array: true,  null: false,  default: []
+      t.timestamps
     end
   end
 

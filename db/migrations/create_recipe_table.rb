@@ -10,6 +10,7 @@ class CreateRecipesTable < ActiveRecord::Migration
       t.boolean :has_been_scraped, null: false, default: false
       t.text :title
       t.text :description
+      t.timestamps
     end
   end
 

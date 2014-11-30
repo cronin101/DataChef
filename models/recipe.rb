@@ -31,6 +31,6 @@ class Recipe < ActiveRecord::Base
   end
 
   def self.oldest_unpopulated
-    DataSource.get(Recipe.unpopulated(descending: false)).first
+    Recipe.where(has_been_scraped: false).order('created_at ASC').first
   end
 end
