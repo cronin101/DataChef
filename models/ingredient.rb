@@ -1,11 +1,14 @@
 # Represents an ingredient used within many recipes
 class Ingredient < ActiveRecord::Base
+  validates_presence_of :name
+
+  def recipe_linked?(recipe_id)
+    Ingredient.where(id: id).where('? = ANY (recipe_ids)', recipe_id).any?
+  end
+
   def link_to_recipe!(recipe_id)
     tap do |i|
-      if Ingredient.where(id: i.id).where('? = ANY (recipe_ids)', recipe_id)
-          .any?
-        fail 'Already Linked'
-      end
+      fail 'Already Linked' if recipe_linked?(recipe_id)
 
       i.recipe_frequency += 1
 

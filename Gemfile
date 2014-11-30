@@ -12,5 +12,9 @@ gem 'colored'
 gem 'pry'
 gem 'pry-coolline'
 gem 'rake'
-gem 'minitest', group: :test
-gem 'codeclimate-test-reporter', group: :test, require: nil
+
+group :test do
+  gem 'activerecord-nulldb-adapter', :git => 'git://github.com/nulldb/nulldb.git'
+  gem 'minitest'
+  gem 'codeclimate-test-reporter', require: nil
+end
