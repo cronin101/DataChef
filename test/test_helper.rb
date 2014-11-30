@@ -4,6 +4,9 @@ CodeClimate::TestReporter.start
 require 'minitest/spec'
 require 'minitest/autorun'
 
+require 'mocha/mini_test'
+require 'mocha/test_unit'
+
 require_relative '../environment.rb'
 
 # Mocking out Rails.root so that nulldb/rails plays nicely with MiniTest

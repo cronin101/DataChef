@@ -16,5 +16,6 @@ gem 'rake'
 group :test do
   gem 'activerecord-nulldb-adapter', :git => 'git://github.com/nulldb/nulldb.git'
   gem 'minitest'
+  gem 'mocha'
   gem 'codeclimate-test-reporter', require: nil
 end
