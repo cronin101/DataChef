@@ -12,17 +12,23 @@ module IngredientParser
     tagger
       .get_nouns(tagged)
       .keys
+      .map(&:downcase)
       .reject { |t| metadata? t }
       .map    { |t| ActiveSupport::Inflector.singularize t }
       .join ' '
   end
 
   def metadata?(token)
-    [:number_or_quantity?, :non_word_characters?].map { |test| send test, token }.any?
+    [:number_or_quantity?, :non_word_characters?, :adjective?].map { |test| send test, token }.any?
   end
 
   def non_word_characters?(token)
     !(/\w+/.match token)
+  end
+
+  def adjective?(token)
+    adjs = %w(warm cold)
+    adjs.include? token
   end
 
   def number_or_quantity?(token)
@@ -39,7 +45,7 @@ module IngredientParser
 
     # Esoteric units:
     units.concat %w(stick splash dash knob pinch glass bottle bunch box)
-    units.concat %w(head sprig fillet piece juice)
+    units.concat %w(head sprig fillet piece)
 
     # Is the token (probably) a quantity?
     units.map { |u| /^(\d+(\.\d+)?)?(#{u}(s)?)?$/.match token }.any?

@@ -1,30 +1,8 @@
-require 'couch_potato'
-
 require_relative '../utils/ingredient_parser.rb'
 
 # Represents a recipe, taken from somewhere on the internet.
-class Recipe
-  include CouchPotato::Persistence
-
-  # The recipe's source
-  property :source_uri
+class Recipe < ActiveRecord::Base
   validates_presence_of :source_uri
-
-  # Ingredient list as taken from the source
-  property :raw_ingredients
-
-  # Normalised ingredient list
-  property :normalised_ingredients
-
-  # Have we processed all the data?
-  property :is_populated, default: false
-
-  property :title
-  property :description
-
-  view :all, key: :source_uri
-  view :unpopulated, key: :created_at,
-                     conditions: 'doc.is_populated === false'
 
   def update_using_scraper(scraper)
     tap do |r|
@@ -33,12 +11,27 @@ class Recipe
 
       r.title                  = contents[:title]
       r.description            = contents[:description]
-      r.raw_ingredients        = contents[:ingredients]
+      r.source_ingredients     = contents[:ingredients]
 
-      r.normalised_ingredients = contents[:ingredients]
+      normalised_ingredients = contents[:ingredients]
           .map { |i| IngredientParser.parse i }
 
-      r.is_populated           = true
+      recipe_id = id
+      normalised_ingredients.each do |name|
+        ingredient = (Ingredient.find_or_create_by name: name).tap do |i|
+          i.recipe_frequency += 1
+
+          i.recipe_ids_will_change!
+          i.recipe_ids << recipe_id
+        end
+        ingredient.save!
+
+        r.ingredient_ids_will_change!
+        r.ingredient_ids << ingredient.reload.id
+      end
+
+      r.has_been_scraped = true
+      r.save!
     end
   end
 

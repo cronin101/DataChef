@@ -9,7 +9,7 @@ module BBCGoodFoodScraper
     {
       title: page.search("//h1[@itemprop = 'name']").first.text,
 
-      description: page.search("//p[@itemprop = 'description']").first.text,
+      description: page.search("//p[@itemprop = 'description']").first.text.chomp,
 
       ingredients: page.search("//li[@itemprop = 'ingredients']").map(&:text)
     }
