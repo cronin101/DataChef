@@ -6,16 +6,20 @@ module IngredientParser
   module_function
 
   def parse(line)
-    tagger = EngTagger.new
-    tagged = tagger.add_tags(line.split(',').first)
-
-    tagger
-      .get_nouns(tagged)
-      .keys
+    nouns_from_first_clause(line)
       .map(&:downcase)
       .reject { |t| metadata? t }
       .map    { |t| ActiveSupport::Inflector.singularize t }
       .join ' '
+  end
+
+  def nouns_from_first_clause(input)
+    tagger = EngTagger.new
+    tagged = tagger.add_tags(input.split(',').first)
+
+    tagger
+      .get_nouns(tagged)
+      .keys
   end
 
   def metadata?(token)
